@@ -1,9 +1,15 @@
+require("globals")
+
+require("lib.console.console")
+
 ------------------------
 -- Load love
 ------------------------
 
 function love.load()
     math.randomseed(os.time())
+
+    globals:load()
 end
 
 ------------------------
@@ -11,7 +17,7 @@ end
 ------------------------
 
 function love.update(dt)
-
+    globals.world:update(dt)
 end
 
 ------------------------
@@ -19,7 +25,8 @@ end
 ------------------------
 
 function love.draw()
-    love.graphics.rectangle( "fill", 10, 20, 100, 200 )
+    globals.world:draw()
+    --globals.surface:draw()
 end
 
 ------------------------
@@ -31,5 +38,9 @@ function love.keypressed(key)
         love.event.quit()
     elseif key == "f" then
         love.window.setFullscreen(not love.window.getFullscreen())
+    elseif key == "r" then
+        globals:load()
     end
+
+    if (key == "`") then console.Show() end
 end

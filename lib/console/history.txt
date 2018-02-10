@@ -1,0 +1,22 @@
+hello
+1 + 1
+print(1+1)
+vertices[33] = 0
+vertices[36] = 0
+vertices[36] = 100
+vertices[36] = 300
+vertices[36] = 500
+vertices[36] = 1000
+vertices[38] = 1000
+vertices[42] = 1000
+vertices[100] = 1000
+vertices[500] = 1000
+vertices[500] = 10000
+vertices[500] = 10000
+vertices[501] = 10000
+vertices[501] = 10000
+vertices[499] = 10000
+hello
+print("Hello")
+love.graphics.rectangle(10,20,300,400)
+love.graphics.rectangle("fill", 10,20,300,400)
