@@ -39,7 +39,7 @@ local Music = require("music")
 local Hud = require("hud")
 local Camera = require("lib.hump.camera")
 local EightBit = require("eightBit")
---local Platform = require("platform")
+Moan = require('lib.Moan')
 
 
 function globals:load()
@@ -62,7 +62,7 @@ function globals:load()
         table.insert(globals.slimes, Slime(vector(x,globals.surface:getY(x) - math.random(50)), 20 + math.random(20), 5))
     end
 
-    globals.pill = Pill(vector(1500, -2000))
+    globals.pill = Pill(vector(1100, -2000))
     globals.bullets = {}
     globals.music = Music()
     globals.camera = Camera()

@@ -12,7 +12,7 @@ function love.load()
     background = love.graphics.newImage("assets/background-final.png")
     globals:load()
 
-
+    Moan.speak("Title", {"Hello World!"})
 end
 
 ------------------------
@@ -20,6 +20,7 @@ end
 ------------------------
 
 function love.update(dt)
+    Moan.update(dt)
     if globals.update_delay > CONFIG.UPDATE_DELAY then
         globals.update_delay = 0
         for i, s in ipairs(globals.slimes) do
@@ -46,7 +47,7 @@ function love.draw()
     globals.eightBit:draw()
 
     love.graphics.draw(background, 0 , 0)
-    globals.world:draw()
+    --globals.world:draw()
     globals.surface:draw()
     globals.pill:draw()
     for i, s in ipairs(globals.slimes) do
@@ -59,6 +60,7 @@ function love.draw()
     globals.camera:detach()
 
     globals.hud:draw()
+    Moan.draw()
 end
 
 ------------------------
@@ -77,8 +79,12 @@ function love.keypressed(key)
     if (key == "`") then console.Show() end
 end
 
+function love.keyreleased(key)
+    Moan.keyreleased(key)
+end
+
 ------------------------
--- Keypressed
+-- Wheelmoved
 ------------------------
 
 function love.wheelmoved(x, y)
