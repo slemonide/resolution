@@ -41,6 +41,7 @@ local Surface = Class{
 
         self.collision_map = globals.world:newChainCollider(true, self.vertices)
         self.collision_map:setType('static')
+        self.collision_map:setRestitution(CONFIG.SURFACE_RESTITUTION)
     end
 }
 
