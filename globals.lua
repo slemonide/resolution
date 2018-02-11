@@ -53,6 +53,7 @@ function globals:load()
     globals.world:addCollisionClass('Good Bullet')
     globals.world:addCollisionClass('Bad Bullet')
 
+    globals.music = Music()
     globals.eightBit = EightBit()
     globals.surface = Surface()
     globals.slimes = {}
@@ -64,7 +65,7 @@ function globals:load()
 
     globals.pill = Pill(vector(1100, -2000))
     globals.bullets = {}
-    globals.music = Music()
+
     globals.camera = Camera()
     globals.update_delay = 0
 

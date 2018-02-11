@@ -10,12 +10,17 @@
 -- Initial state of the game with everything 8bit
 ------------------------------------------------------------------------
 local Platform = require('platform')
+local Music = require('music')
 
 
 local eightBit = Class{
     init = function(self)
 
+
         globals.world:addCollisionClass('Platform')
+
+
+        globals.music.eightBitSound:play()
 
         self.player = love.graphics.newImage("assets/Pill-soldier-8bit-small.png")
         self.eightBitBackground = love.graphics.newImage("assets/8bit-background.png")
@@ -84,9 +89,10 @@ local eightBit = Class{
 
 
 function eightBit:update(dt)
+    --globals.music.swallow:play()
+    -- globals.music.eightBitSound:play()
 
-    globals.music.swallow:play()
-    globals.music.eightBitSound:play()
+ --  globals.music.eightBitSound:play()
 
 end
 
