@@ -2,26 +2,26 @@
 -- The bottom solid surface
 ------------------------------------------------------------------------
 
-local function init_vertices(vertices)
-    local coefficients = {}
-    local coefficients2 = {}
-    local coefficients3 = {}
+local coefficients = {}
+local coefficients2 = {}
+local coefficients3 = {}
 
+local function surface(i)
+    local out = 50
+
+    for j = 1, CONFIG.SURFACE_COMPLEXITY do
+        out = out + math.sin(math.pi*j^coefficients3[j]/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
+                + math.sin(math.pi*j^(0.2+coefficients3[j])/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
+    end
+
+    return 10*out
+end
+
+local function init_vertices(vertices)
     for i = 1, CONFIG.SURFACE_COMPLEXITY do
         table.insert(coefficients, math.random() * 2 - 1)
         table.insert(coefficients2, math.random())
         table.insert(coefficients3, math.random())
-    end
-
-    local function surface(i)
-        local out = 50
-
-        for j = 1, CONFIG.SURFACE_COMPLEXITY do
-            out = out + math.sin(math.pi*j^coefficients3[j]/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
-                    + math.sin(math.pi*j^(0.2+coefficients3[j])/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
-        end
-
-        return 10*out
     end
 
     table.insert(vertices, 0)
@@ -41,12 +41,18 @@ local Surface = Class{
 
         self.collision_map = globals.world:newChainCollider(true, self.vertices)
         self.collision_map:setType('static')
+        self.collision_map:setRestitution(CONFIG.SURFACE_RESTITUTION)
     end
 }
+
+function Surface:getY(x)
+    return surface(x)
+end
 
 function Surface:draw()
     love.graphics.setColor(255, 0, 0)
     love.graphics.polygon('fill', self.vertices)
+    love.graphics.setColor(255, 255, 255)
 end
 
 return Surface

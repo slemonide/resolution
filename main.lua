@@ -8,6 +8,7 @@ require("lib.console.console")
 
 function love.load()
     math.randomseed(os.time())
+
     background = love.graphics.newImage("assets/Background.jpg")
 
     globals:load()
@@ -19,6 +20,7 @@ end
 
 function love.update(dt)
     globals.world:update(dt)
+    globals.slime:update(dt)
 end
 
 ------------------------
@@ -26,10 +28,9 @@ end
 ------------------------
 
 function love.draw()
-
     love.graphics.draw(background, 0 , 0)
     globals.world:draw()
-    --globals.surface:draw()
+    globals.surface:draw()
 end
 
 ------------------------
