@@ -31,6 +31,7 @@ end
 
 function Pill:jump()
     if self:canMove() then
+        globals.music:jump()
         local tangent = globals.surface:getDerivativeAt(self.bone:getX())
 
         local v = vector.fromPolar(math.atan(tangent) - math.pi/2, CONFIG.PILL_JUMP_STRENGTH)
@@ -43,6 +44,7 @@ function Pill:pos()
 end
 
 function Pill:fire()
+    globals.music:gun()
     local v_dir = vector(
         love.mouse.getX() - love.graphics.getWidth()/2,
         love.mouse.getY() - love.graphics.getHeight()/2 - 50):normalized()
@@ -72,6 +74,7 @@ function Pill:update(dt)
         self:moveRight()
     end
     if love.mouse.isDown(1) then
+       -- globals.music:gun()
         self:fire()
     end
     if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
