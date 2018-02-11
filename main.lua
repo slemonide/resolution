@@ -21,6 +21,7 @@ end
 function love.update(dt)
     globals.world:update(dt)
     globals.slime:update(dt)
+    globals.pill:update(dt)
 end
 
 ------------------------
@@ -29,8 +30,9 @@ end
 
 function love.draw()
     love.graphics.draw(background, 0 , 0)
-    --globals.world:draw()
+    globals.world:draw()
     globals.surface:draw()
+    globals.pill:draw()
     globals.slime:draw()
 end
 
