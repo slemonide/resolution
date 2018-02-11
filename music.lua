@@ -13,22 +13,16 @@
 
 
 local Music = Class{
-
-
+    init = function()
+        sound = ripple.newSound("assets/Stomach_Ambiance.wav")
+        sound:play()
+    end
 
 }
 
 
 
-
 function Music:update(dt)
-
-end
-
-
-
-function Music:draw()
-
 
 end
 
