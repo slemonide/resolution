@@ -1,10 +1,3 @@
---
--- Created by IntelliJ IDEA.
--- User: eylulaygun
--- Date: 2018-02-10
--- Time: 6:44 PM
--- To change this template use File | Settings | File Templates.
---
 ------------------------------------------------------------------------
 -- Bullets that are shot by the soldier pill using mouse
 ------------------------------------------------------------------------
@@ -13,12 +6,18 @@
 
 local Bullet = Class{
     init = function(self, pos, v)
-        self.pos = pos
         self.bone = globals.world:newCircleCollider(pos.x, pos.y, 3)
-        self.bone:setLinearVelocity( v.x , v.y)
-        self.bone:setMass(100)
+        self.bone:setLinearVelocity(v.x , v.y)
     end
 }
+
+function Bullet:remove()
+    self.bone:destroy()
+end
+
+function Bullet:update(dt)
+
+end
 
 
 

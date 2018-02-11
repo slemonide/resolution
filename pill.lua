@@ -28,55 +28,48 @@ function Pill:moveRight()
 end
 
 
-function Pill:mousepressed(x, y, button)
-    if button == 1 then
-        globals.music.bulletSound:play()
-        local startX = self.bone:getX()
-        local startY = self.bone:getY()
-        local mouseX = x
-        local mouseY = y
+function Pill:mousepressed()
+    local v_dir = vector(
+        love.mouse.getX() - love.graphics.getWidth()/2,
+        love.mouse.getY() - love.graphics.getHeight()/2 - 50):normalized()
 
-        local angle = math.atan2((mouseY - startY), (mouseX - startX))
+    if (#globals.bullets < CONFIG.MAX_BULLETS) then
+        table.insert(globals.bullets, Bullet(
+            vector(self.bone:getX(), self.bone:getY()) + v_dir * 5,
+            v_dir * CONFIG.BULLET_SPEED))
+    else
+        globals.bullets.pos = globals.bullets.pos or 1
+        globals.bullets[globals.bullets.pos]:remove()
+        globals.bullets[globals.bullets.pos] = Bullet(
+            vector(self.bone:getX(), self.bone:getY()) + v_dir * 5,
+            v_dir * CONFIG.BULLET_SPEED)
+        globals.bullets.pos = globals.bullets.pos + 1
+        if (globals.bullets.pos > #globals.bullets) then
+            globals.bullets.pos = 1
+        end
 
-        local bulletDx = CONFIG.BULLET_SPEED * math.cos(angle)
-        local bulletDy = CONFIG.BULLET_SPEED * math.sin(angle)
-
-        table.insert(globals.bullets,
-            Bullet(
-                vector(self.bone:getX(),self.bone:getY()),
-                vector(bulletDx,bulletDy)
-            ))
     end
 end
-
-
-
 
 function Pill:update(dt)
     if love.keyboard.isDown("g") then
         self:moveLeft()
     elseif love.keyboard.isDown("h") then
         self:moveRight()
-    elseif love.mouse.isDown() then
-        love.mousepressed()
+    elseif love.mouse.isDown(1) then
+        self:mousepressed()
     end
 
     -- keep it above the surface
-
-        local y = globals.surface:getY(self.bone:getX())
-        if self.bone:getY() > y then
-            self.bone:setY(y - 3)
-        end
-
+    local y = globals.surface:getY(self.bone:getX())
+    if self.bone:getY() > y then
+        self.bone:setY(y - 3)
+    end
 end
-
-
 
 function Pill:draw()
     love.graphics.draw(self.img, self.bone:getX() - 20 , self.bone:getY() - (self.img:getHeight()*.4), 0, 0.5, 0.5)
 
 end
-
-
 
 return Pill

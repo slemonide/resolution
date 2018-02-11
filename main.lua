@@ -64,7 +64,3 @@ function love.keypressed(key)
 
     if (key == "`") then console.Show() end
 end
-
-function love.mousepressed(x,y, button)
-    globals.pill:mousepressed(x,y,button)
-end
