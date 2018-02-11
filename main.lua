@@ -11,8 +11,9 @@ function love.load()
     math.randomseed(os.time())
 
     background = love.graphics.newImage("assets/Background.jpg")
-    bulletSpeed = 200
-    bullets = {}
+
+
+
 
     globals:load()
 end
@@ -26,10 +27,8 @@ function love.update(dt)
     globals.slime:update(dt)
     globals.pill:update(dt)
 
-    for i,v in ipairs(bullets) do
-        v.x = v.x + (v.dx * dt)
-        v.y = v.y + (v.dy * dt)
-    end
+    --globals.bullet:update(dt)
+
 
 end
 
@@ -43,13 +42,12 @@ function love.draw()
     globals.surface:draw()
     globals.pill:draw()
     globals.slime:draw()
-
-
-    love.graphics.setColor(128, 128, 128)
-    for i,v in ipairs(bullets) do
-        love.graphics.circle("fill", v.x, v.y, 3)
+    for i, b in ipairs(globals.bullets) do
+        b:draw()
     end
-    love.graphics.setColor(250, 250, 250)
+
+
+
 end
 
 ------------------------

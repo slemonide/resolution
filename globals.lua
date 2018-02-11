@@ -11,6 +11,7 @@ globals = {}
 local Surface = require("surface")
 local Slime = require("slime")
 local Pill = require("pill")
+local Bullet = require("bullet")
 
 function globals:load()
     globals.world = wf.newWorld(0, 0, true)
@@ -19,6 +20,7 @@ function globals:load()
     globals.surface = Surface()
     globals.slime = Slime(vector(200,400))
     globals.pill = Pill(vector(250,400))
+    globals.bullets = {}
 end
 
 CONFIG = {
@@ -28,4 +30,5 @@ CONFIG = {
     SLIME_IMPULSE = 10,
     SURFACE_RESTITUTION = 0.3,
     PILL_IMPULSE = 10,
+    BULLET_SPEED = 900
 }

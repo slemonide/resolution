@@ -9,7 +9,7 @@
 ------------------------------------------------------------------------
 -- Soldier Pill boi
 ------------------------------------------------------------------------
-
+local Bullet = require("bullet")
 
 local Pill = Class{
     init = function(self, pos)
@@ -37,10 +37,14 @@ function Pill:mousepressed(x, y, button)
 
         local angle = math.atan2((mouseY - startY), (mouseX - startX))
 
-        local bulletDx = bulletSpeed * math.cos(angle)
-        local bulletDy = bulletSpeed * math.sin(angle)
+        local bulletDx = CONFIG.BULLET_SPEED * math.cos(angle)
+        local bulletDy = CONFIG.BULLET_SPEED * math.sin(angle)
 
-        table.insert(bullets, {x = startX, y = startY, dx = bulletDx, dy = bulletDy})
+        table.insert(globals.bullets,
+            Bullet(
+                vector(self.bone:getX(),self.bone:getY()),
+                vector(bulletDx,bulletDy)
+            ))
     end
 end
 
@@ -68,11 +72,7 @@ end
 
 
 function Pill:draw()
-    --love.graphics.push()
-    --love.graphics.scale(.4,.4)
     love.graphics.draw(self.img, self.bone:getX() - 20 , self.bone:getY() - (self.img:getHeight()*.4), 0, 0.5, 0.5)
-
-    --love.graphics.pop()
 
 end
 
