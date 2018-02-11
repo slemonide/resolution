@@ -28,6 +28,23 @@ function Pill:moveRight()
 end
 
 
+function Pill:mousepressed(x, y, button)
+    if button == 1 then
+        local startX = self.bone:getX()
+        local startY = self.bone:getY()
+        local mouseX = x
+        local mouseY = y
+
+        local angle = math.atan2((mouseY - startY), (mouseX - startX))
+
+        local bulletDx = bulletSpeed * math.cos(angle)
+        local bulletDy = bulletSpeed * math.sin(angle)
+
+        table.insert(bullets, {x = startX, y = startY, dx = bulletDx, dy = bulletDy})
+    end
+end
+
+
 
 
 function Pill:update(dt)
@@ -35,6 +52,8 @@ function Pill:update(dt)
         self:moveLeft()
     elseif love.keyboard.isDown("h") then
         self:moveRight()
+    elseif love.mouse.isDown() then
+        love.mousepressed()
     end
 
     -- keep it above the surface
@@ -52,6 +71,7 @@ function Pill:draw()
     --love.graphics.push()
     --love.graphics.scale(.4,.4)
     love.graphics.draw(self.img, self.bone:getX() - 20 , self.bone:getY() - (self.img:getHeight()*.4), 0, 0.5, 0.5)
+
     --love.graphics.pop()
 
 end
