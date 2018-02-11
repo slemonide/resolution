@@ -25,18 +25,25 @@ local Music = Class{
         self.goodSlimeSound = ripple.newSound("assets/Good_Slime_Vocalization_2.wav")
 
 
-        self.mainSound:play()
+       -- self.mainSound:play()
 
     end
 
 }
+
+function Music:eightBitGame()
+    self.eightBit:play()
+end
+
+function Music:mainGame()
+    self.mainSound:play()
+end
 
 function Music:jump()
     self.jumpSound:play()
 end
 
 function Music:gun()
-
     self.bulletSound:play()
 
 end

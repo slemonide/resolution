@@ -16,7 +16,8 @@ local Pill = Class{
 }
 
 function Pill:canMove()
-    return math.abs(globals.surface:getY(self.bone:getX()) - self.bone:getY()) < 40
+
+    return (self.bone:getY() < 0) or (math.abs(globals.surface:getY(self.bone:getX()) - self.bone:getY()) < 40)
 end
 
 function Pill:moveLeft()
