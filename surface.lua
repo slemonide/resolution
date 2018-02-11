@@ -7,11 +7,11 @@ local coefficients2 = {}
 local coefficients3 = {}
 
 local function surface(i)
-    local out = 50
+    local out = 80
 
     for j = 1, CONFIG.SURFACE_COMPLEXITY do
         out = out + math.sin(math.pi*j^coefficients3[j]/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
-                + math.sin(math.pi*j^(0.2+coefficients3[j])/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
+                + math.sin(math.pi*j^(0.7+coefficients3[j])/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
     end
 
     return 10*out
@@ -25,13 +25,13 @@ local function init_vertices(vertices)
     end
 
     table.insert(vertices, 0)
-    table.insert(vertices, 1000)
-    for i = 0,CONFIG.XSIZE do
+    table.insert(vertices, 10000)
+    for i = 0,CONFIG.XSIZE,10 do
         table.insert(vertices, i)
         table.insert(vertices, surface(i))
     end
     table.insert(vertices, CONFIG.XSIZE)
-    table.insert(vertices, 1000)
+    table.insert(vertices, 10000)
 end
 
 local Surface = Class{
@@ -39,7 +39,7 @@ local Surface = Class{
         self.vertices = {}
         init_vertices(self.vertices)
 
-        self.collision_map = globals.world:newChainCollider(true, self.vertices)
+        self.collision_map = globals.world:newChainCollider(false, self.vertices)
         self.collision_map:setType('static')
         self.collision_map:setRestitution(CONFIG.SURFACE_RESTITUTION)
     end

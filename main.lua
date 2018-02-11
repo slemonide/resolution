@@ -12,9 +12,6 @@ function love.load()
 
     background = love.graphics.newImage("assets/Background.jpg")
 
-
-
-
     globals:load()
 end
 
@@ -27,9 +24,9 @@ function love.update(dt)
     globals.slime:update(dt)
     globals.pill:update(dt)
 
+    --globals.camera:update(dt)
+    globals.camera:lookAt(globals.pill.bone:getX(), globals.pill.bone:getY() - 50)
     --globals.bullet:update(dt)
-
-
 end
 
 ------------------------
@@ -37,6 +34,8 @@ end
 ------------------------
 
 function love.draw()
+    globals.camera:attach()
+
     love.graphics.draw(background, 0 , 0)
     --globals.world:draw()
     globals.surface:draw()
@@ -46,8 +45,7 @@ function love.draw()
         b:draw()
     end
 
-
-
+    globals.camera:detach()
 end
 
 ------------------------
