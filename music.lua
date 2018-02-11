@@ -33,7 +33,6 @@ local Music = Class{
 }
 
 function Music:eightBitGame()
-
     self.eightBitSound:play()
 end
 
