@@ -40,10 +40,13 @@ end
 ------------------------
 
 function love.draw()
+
     globals.camera:attach()
 
+    globals.eightBit:draw()
+
     love.graphics.draw(background, 0 , 0)
-    --globals.world:draw()
+    globals.world:draw()
     globals.surface:draw()
     globals.pill:draw()
     for i, s in ipairs(globals.slimes) do

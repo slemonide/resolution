@@ -35,6 +35,9 @@ local Slime = require("slime")
 local Pill = require("pill")
 local Music = require("music")
 local Camera = require("lib.hump.camera")
+local EightBit = require("eightBit")
+--local Platform = require("platform")
+
 
 function globals:load()
     globals.world = wf.newWorld(0, 0, true)
@@ -43,16 +46,19 @@ function globals:load()
     globals.world:addCollisionClass('Good Bullet')
     globals.world:addCollisionClass('Bad Bullet')
 
+    globals.eightBit = EightBit()
     globals.surface = Surface()
     globals.slimes = {}
+
     for i = 1, CONFIG.MAX_SLIMES do
         local x = math.random(CONFIG.XSIZE)
         table.insert(globals.slimes, Slime(vector(x,globals.surface:getY(x) - math.random(50)), 20 + math.random(20), 5))
     end
 
-    globals.pill = Pill(vector(CONFIG.XSIZE/2,globals.surface:getY(CONFIG.XSIZE/2)-10))
+    globals.pill = Pill(vector(1500, -2000))
     globals.bullets = {}
     globals.music = Music()
     globals.camera = Camera()
     globals.update_delay = 0
+  --  globals.platform = Platform()
 end
