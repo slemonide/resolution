@@ -7,6 +7,7 @@ local Pill = Class{
     init = function(self, pos)
         self.bone = globals.world:newCircleCollider(pos.x, pos.y, 10)
         self.bone:setMass(2)
+        self.bone:setCollisionClass('Player')
         self.img = love.graphics.newImage("assets/Pill-soldier-small.png")
         self.movingLeft = true
     end
@@ -37,6 +38,10 @@ function Pill:jump()
     end
 end
 
+function Pill:pos()
+    return vector(self.bone:getX(), self.bone:getY())
+end
+
 function Pill:fire()
     local v_dir = vector(
         love.mouse.getX() - love.graphics.getWidth()/2,
@@ -60,16 +65,16 @@ function Pill:fire()
 end
 
 function Pill:update(dt)
-    if love.keyboard.isDown("g") or love.mouse.isDown(3) and self.movingLeft then
+    if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
         self:moveLeft()
     end
-    if love.keyboard.isDown("h") or love.mouse.isDown(3) and not self.movingLeft then
+    if love.keyboard.isDown("h", "d") or love.mouse.isDown(3) and not self.movingLeft then
         self:moveRight()
     end
     if love.mouse.isDown(1) then
         self:fire()
     end
-    if love.keyboard.isDown("space") or love.mouse.isDown(2) then
+    if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
         self:jump()
     end
 

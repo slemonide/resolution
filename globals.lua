@@ -22,10 +22,12 @@ CONFIG = {
     PILL_IMPULSE = 15,
     BULLET_SPEED = 900,
     INITIAL_SLIME_HP = 100,
-    MAX_BULLETS = 100,
+    MAX_BULLETS = 150,
     UPDATE_DELAY = 0.01,
+    MACHINEGUN_DELAY = 0.08,
 
-    MAX_SLIMES = 16
+    MAX_SLIMES = 16,
+    SLIME_VIEW_RANGE = 100
 }
 
 
@@ -34,12 +36,17 @@ local Surface = require("surface")
 local Slime = require("slime")
 local Pill = require("pill")
 local Music = require("music")
+local Hud = require("hud")
 local Camera = require("lib.hump.camera")
 
 function globals:load()
-    globals.world = wf.newWorld(0, 0, true)
+    globals.world = wf.newWorld(0, 0, false)
     globals.world:setGravity(0, 512)
-    globals.world:addCollisionClass('Slime')
+    globals.world:setQueryDebugDrawing(true)
+
+    globals.world:addCollisionClass('Player')
+    globals.world:addCollisionClass('Good Slime')
+    globals.world:addCollisionClass('Bad Slime')
     globals.world:addCollisionClass('Good Bullet')
     globals.world:addCollisionClass('Bad Bullet')
 
@@ -55,4 +62,6 @@ function globals:load()
     globals.music = Music()
     globals.camera = Camera()
     globals.update_delay = 0
+
+    globals.hud = Hud()
 end

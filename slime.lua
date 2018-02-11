@@ -17,10 +17,10 @@ local Slime = Class{
 
         for _, side in ipairs(self.sides) do
             side:setRestitution(0.8)
-            side:setCollisionClass('Slime')
         end
 
         self.center = self.sides[1]
+        self.center:setCollisionClass('Bad Slime')
 
         self.joints = {
             globals.world:addJoint('RevoluteJoint', self.sides[1], self.sides[2],
@@ -44,10 +44,37 @@ function Slime:canMove()
     return math.abs(globals.surface:getY(self.center:getX()) - self.center:getY()) < 40
 end
 
+function Slime:pos()
+    return vector(self.center:getX(), self.center:getY())
+end
+
+function Slime:think()
+    local enemy
+    if self:isBad() then
+        enemy = {'Good Slime', 'Player'}
+    else
+        enemy = {'Bad Slime'}
+    end
+
+    --local foes = globals.world:queryCircleArea(self.center:getX(), self.center:getY(),
+    --    CONFIG.SLIME_VIEW_RANGE, enemy)
+    local pos = self:pos()
+--[[
+    local foes = globals.world:queryRectangleArea(pos.x, pos.y, 100, 100, enemy)
+    for _, foe in ipairs(foes) do
+        local v_dir = foe:pos() - self:pos()
+        v_dir = v_dir:normalized()
+
+        self:shoot(v_dir)
+    end
+    --]]
+    -- TODO: finish
+end
+
 function Slime:update(dt)
     self.lookDir = (self.lookDir + dt) % (2 * math.pi)
 
-    if (math.random() > 0.9) then
+    if (math.random() > 0.8) then
         self:move()
     end
 
@@ -72,7 +99,13 @@ function Slime:update(dt)
         end
 
         if side:enter('Bad Bullet') then
-            self.hp = math.max(self.hp - 1, 0)
+            self.hp = math.max(self.hp - (self:isBad() and 1 or 20), 0)
+        end
+
+        if self.hp > 50 then
+            self.center:setCollisionClass('Good Slime')
+        else
+            self.center:setCollisionClass('Bad Slime')
         end
     end
 end
@@ -89,8 +122,8 @@ function Slime:isBad()
     return self.hp < 50
 end
 
-function Slime:shoot()
-    local v_dir = vector.fromPolar(self.lookDir, 1)
+function Slime:shoot(dir)
+    local v_dir = dir and dir or vector.fromPolar(self.lookDir, 1)
 
     if (#globals.bullets < CONFIG.MAX_BULLETS) then
         table.insert(globals.bullets, Bullet(
@@ -160,11 +193,19 @@ function Slime:draw()
 
     -- draw eyes
     love.graphics.setColor(255,255,255)
-    love.graphics.circle("fill", center.x + 10, center.y - 10, 5)
-    love.graphics.circle("fill", center.x - 10, center.y - 10, 5)
-    love.graphics.setColor(0,0,255)
-    love.graphics.circle("fill", center.x + 10, center.y - 8, 2)
-    love.graphics.circle("fill", center.x - 10, center.y - 8, 2)
+    if self:isBad() then
+        love.graphics.circle("fill", center.x + 10, center.y - 10, 10, 3 + math.floor(self.hp/5))
+        love.graphics.circle("fill", center.x - 10, center.y - 10, 10, 3 + math.floor(self.hp/5))
+        love.graphics.setColor(40,20,30)
+        love.graphics.circle("fill", center.x + 10, center.y - 8, 5)
+        love.graphics.circle("fill", center.x - 10, center.y - 8, 5)
+    else
+        love.graphics.circle("fill", center.x + 10, center.y - 10, 5)
+        love.graphics.circle("fill", center.x - 10, center.y - 10, 5)
+        love.graphics.setColor(0,0,255)
+        love.graphics.circle("fill", center.x + 10, center.y - 8, 2)
+        love.graphics.circle("fill", center.x - 10, center.y - 8, 2)
+    end
 
     love.graphics.setColor(255, 255, 255)
 end
