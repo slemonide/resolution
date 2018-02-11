@@ -10,42 +10,47 @@
 -- Soldier Pill boi
 ------------------------------------------------------------------------
 
--- connects bones i to j with muscles
---local function connectBones(muscles, bones, i, j)
---    table.insert(muscles,
---        globals.world:addJoint('DistanceJoint', bones[i], bones[j],
---            bones[i]:getX(), bones[i]:getY(),
---            bones[j]:getX(), bones[j]:getY(), true))
---end
 
 local Pill = Class{
     init = function(self, pos)
         self.pos = pos
 
-  --      self.bones = {
-  --          globals.world:newCircleCollider(pos.x + 7, pos.y + 7, 5),
-  --          globals.world:newCircleCollider(pos.x + 7, pos.y - 7, 4),
-  --          globals.world:newCircleCollider(pos.x - 7, pos.y + 7, 4),
-   --         globals.world:newCircleCollider(pos.x - 7, pos.y - 7, 6)
-   --     }
-   --     self.muscles = {}
+                globals.world:newCircleCollider(
+                    pos.x + l * math.cos(2*math.pi/8*i),
+                    pos.y + l * math.sin(2*math.pi/8*i), r)
+        end
 
-        -- assume: there is more than 4 bones
-  --      for i = 1, #self.bones - 1 do
-  --          connectBones(self.muscles, self.bones, i, i + 1)
-  --      end
-  --      connectBones(self.muscles, self.bones, 1, #self.bones)
-    end
+
 }
 
-function Pill:update(dt, player)
-    -- see hump.vector
-    local dir = (player.pos - self.pos):normalize_inplace()
-    self.pos = self.pos + dir * Pill.speed * dt
-
-
-    
+function Pill:moveLeft()
+    for i = 1, #self.bones do
+        self.bones[i]:applyLinearImpulse(-CONFIG.PILL_IMPULSE, 0)
+    end
 end
+
+function Pill:moveRight()
+    for i = 1, #self.bones do
+        self.bones[i]:applyLinearImpulse(CONFIG.PILL_IMPULSE, 0)
+    end
+end
+function Pill:update(dt)
+    if love.keyboard.isDown("a") then
+        self:moveLeft()
+    elseif love.keyboard.isDown("d") then
+        self:moveRight()
+    end
+
+    -- keep it above the surface
+    for i = 1, #self.bones do
+        local y = globals.surface:getY(self.bones[i]:getX())
+        if self.bones[i]:getY() > y then
+            self.bones[i]:setY(y - 3)
+        end
+    end
+end
+
+
 
 function Pill:draw()
     love.graphics.draw(self.img, self.pos.x, self.pos.y)
