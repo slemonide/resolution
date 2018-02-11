@@ -6,6 +6,7 @@
 Class = require "lib.hump.class"
 vector = require "lib.hump.vector"
 wf = require "lib.windfield"
+ripple = require "lib/ripple"
 
 globals = {}
 local Surface = require("surface")

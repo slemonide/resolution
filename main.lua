@@ -12,7 +12,7 @@ require("lib.console.console")
 function love.load()
     math.randomseed(os.time())
 
-    background = love.graphics.newImage("assets/Background.jpg")
+    background = love.graphics.newImage("assets/background-big.png")
     globals:load()
 
 
@@ -26,7 +26,6 @@ function love.update(dt)
     globals.world:update(dt)
     globals.slime:update(dt)
     globals.pill:update(dt)
-    globals.music:update(dt)
 
     globals.camera:lookAt(globals.pill.bone:getX(), globals.pill.bone:getY() - 50)
 end

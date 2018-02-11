@@ -50,7 +50,7 @@ function Surface:getY(x)
 end
 
 function Surface:draw()
-    love.graphics.setColor(255, 0, 0)
+    love.graphics.setColor(216, 76, 11)
     love.graphics.polygon('fill', self.vertices)
     love.graphics.setColor(255, 255, 255)
 end
