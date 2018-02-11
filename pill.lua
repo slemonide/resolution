@@ -32,9 +32,21 @@ function Pill:mousepressed()
         love.mouse.getX() - love.graphics.getWidth()/2,
         love.mouse.getY() - love.graphics.getHeight()/2 - 50):normalized()
 
-    table.insert(globals.bullets, Bullet(
-            vector(self.bone:getX(), self.bone:getY()) + v_dir * 100,
+    if (#globals.bullets < CONFIG.MAX_BULLETS) then
+        table.insert(globals.bullets, Bullet(
+            vector(self.bone:getX(), self.bone:getY()) + v_dir * 5,
             v_dir * CONFIG.BULLET_SPEED))
+    else
+        globals.bullets.pos = globals.bullets.pos or 1
+        globals.bullets[globals.bullets.pos]:remove()
+        globals.bullets[globals.bullets.pos] = Bullet(
+            vector(self.bone:getX(), self.bone:getY()) + v_dir * 5,
+            v_dir * CONFIG.BULLET_SPEED)
+        globals.bullets.pos = globals.bullets.pos + 1
+        if (globals.bullets.pos > #globals.bullets) then
+            globals.bullets.pos = 1
+        end
+    end
 end
 
 function Pill:update(dt)
