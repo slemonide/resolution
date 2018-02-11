@@ -40,7 +40,8 @@ function globals:load()
     globals.world = wf.newWorld(0, 0, true)
     globals.world:setGravity(0, 512)
     globals.world:addCollisionClass('Slime')
-    globals.world:addCollisionClass('Bullet')
+    globals.world:addCollisionClass('Good Bullet')
+    globals.world:addCollisionClass('Bad Bullet')
 
     globals.surface = Surface()
     globals.slimes = {}

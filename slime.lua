@@ -67,8 +67,12 @@ function Slime:update(dt)
 
     -- handle damage
     for _, side in ipairs(self.sides) do
-        if side:enter('Bullet') then
-            self.hp = (self.hp + 1) % 100
+        if side:enter('Good Bullet') then
+            self.hp = math.min(self.hp + 5, 100)
+        end
+
+        if side:enter('Bad Bullet') then
+            self.hp = math.max(self.hp - 1, 0)
         end
     end
 end
@@ -81,19 +85,23 @@ function Slime:move()
     end
 end
 
+function Slime:isBad()
+    return self.hp < 50
+end
+
 function Slime:shoot()
     local v_dir = vector.fromPolar(self.lookDir, 1)
 
     if (#globals.bullets < CONFIG.MAX_BULLETS) then
         table.insert(globals.bullets, Bullet(
             vector(self.center:getX(), self.center:getY()) + v_dir * 5,
-            v_dir * CONFIG.BULLET_SPEED))
+            v_dir * CONFIG.BULLET_SPEED, self:isBad()))
     else
         globals.bullets.pos = globals.bullets.pos or 1
         globals.bullets[globals.bullets.pos]:remove()
         globals.bullets[globals.bullets.pos] = Bullet(
             vector(self.center:getX(), self.center:getY()) + v_dir * 5,
-            v_dir * CONFIG.BULLET_SPEED)
+            v_dir * CONFIG.BULLET_SPEED, self:isBad())
         globals.bullets.pos = globals.bullets.pos + 1
         if (globals.bullets.pos > #globals.bullets) then
             globals.bullets.pos = 1
