@@ -33,6 +33,7 @@ end
 function Bullet:draw()
     love.graphics.setColor(128, 128, 128)
     love.graphics.circle("fill", self.bone:getX(), self.bone:getY(), 3)
+    love.graphics.setColor(255, 255, 255)
 
 
 end
