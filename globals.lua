@@ -10,6 +10,7 @@ wf = require 'lib.windfield'
 globals = {}
 local Surface = require("surface")
 local Slime = require("slime")
+local Pill = require("pill")
 
 function globals:load()
     globals.world = wf.newWorld(0, 0, true)
@@ -18,6 +19,7 @@ function globals:load()
     globals.surface = Surface()
 
     globals.slime = Slime(vector(200,400))
+    globals.pill = Pill(vector(200,400))
 end
 
 CONFIG = {

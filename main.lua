@@ -21,6 +21,7 @@ end
 function love.update(dt)
     globals.world:update(dt)
     globals.slime:update(dt)
+    globals.pill:update(dt)
 end
 
 ------------------------

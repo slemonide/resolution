@@ -14,8 +14,7 @@
 local Pill = Class{
     init = function(self, pos)
         self.pos = pos
-
-                globals.world:newCircleCollider(
+        self.bone = globals.world:newCircleCollider(
                     pos.x + l * math.cos(2*math.pi/8*i),
                     pos.y + l * math.sin(2*math.pi/8*i), r)
         end
@@ -24,15 +23,12 @@ local Pill = Class{
 }
 
 function Pill:moveLeft()
-    for i = 1, #self.bones do
-        self.bones[i]:applyLinearImpulse(-CONFIG.PILL_IMPULSE, 0)
-    end
+        self.bone:applyLinearImpulse(-CONFIG.PILL_IMPULSE, 0)
 end
 
 function Pill:moveRight()
-    for i = 1, #self.bones do
-        self.bones[i]:applyLinearImpulse(CONFIG.PILL_IMPULSE, 0)
-    end
+
+        self.bone:applyLinearImpulse(CONFIG.PILL_IMPULSE, 0)
 end
 function Pill:update(dt)
     if love.keyboard.isDown("a") then
@@ -42,12 +38,12 @@ function Pill:update(dt)
     end
 
     -- keep it above the surface
-    for i = 1, #self.bones do
-        local y = globals.surface:getY(self.bones[i]:getX())
-        if self.bones[i]:getY() > y then
-            self.bones[i]:setY(y - 3)
+
+        local y = globals.surface:getY(self.bone:getX())
+        if self.bone:getY() > y then
+            self.bone:setY(y - 3)
         end
-    end
+
 end
 
 
