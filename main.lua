@@ -8,8 +8,7 @@ require("lib.console.console")
 
 function love.load()
     math.randomseed(os.time())
-
-    background = love.graphics.newImage("assets/Background.png")
+    background = love.graphics.newImage("assets/Background.jpg")
 
     globals:load()
 end
