@@ -15,7 +15,9 @@ CONFIG = {
     SLIME_IMPULSE = 5,
     SURFACE_RESTITUTION = 0.3,
 
-    SLIME_JUMP_STRENGTH = 100,
+    SLIME_BAD_COLOR = vector(255, 0),
+    SLIME_GOOD_COLOR = vector(61, 71),
+    SLIME_JUMP_STRENGTH = 60,
     PILL_JUMP_STRENGTH = 400,
     PILL_IMPULSE = 15,
     BULLET_SPEED = 900,
@@ -23,7 +25,7 @@ CONFIG = {
     MAX_BULLETS = 100,
     UPDATE_DELAY = 0.01,
 
-    MAX_SLIMES = 8
+    MAX_SLIMES = 16
 }
 
 
@@ -37,6 +39,8 @@ local Camera = require("lib.hump.camera")
 function globals:load()
     globals.world = wf.newWorld(0, 0, true)
     globals.world:setGravity(0, 512)
+    globals.world:addCollisionClass('Slime')
+    globals.world:addCollisionClass('Bullet')
 
     globals.surface = Surface()
     globals.slimes = {}
@@ -45,8 +49,7 @@ function globals:load()
         table.insert(globals.slimes, Slime(vector(x,globals.surface:getY(x) - math.random(50)), 20 + math.random(20), 5))
     end
 
-    --globals.slime = Slime(vector(200,400), 30, 16)
-    globals.pill = Pill(vector(250,400))
+    globals.pill = Pill(vector(CONFIG.XSIZE/2,globals.surface:getY(CONFIG.XSIZE/2)-10))
     globals.bullets = {}
     globals.music = Music()
     globals.camera = Camera()

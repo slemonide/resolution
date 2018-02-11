@@ -71,3 +71,11 @@ function love.keypressed(key)
 
     if (key == "`") then console.Show() end
 end
+
+------------------------
+-- Keypressed
+------------------------
+
+function love.wheelmoved(x, y)
+    globals.pill.movingLeft = (y > 0)
+end

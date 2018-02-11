@@ -3,80 +3,45 @@
 ------------------------------------------------------------------------
 local Bullet = require("bullet")
 
--- connects bones i to j with distanceJoint
-local function distanceJoint(muscles, bones, i, j)
-    table.insert(muscles,
-        globals.world:addJoint('DistanceJoint', bones[i], bones[j],
-            bones[i]:getX(), bones[i]:getY(),
-            bones[j]:getX(), bones[j]:getY(), true))
-end
-
-local function ropeJointBone(muscles, bones, size, bone, j)
-    table.insert(muscles,
-        globals.world:addJoint('RopeJoint', bone, bones[j],
-            bone:getX(), bone:getY(),
-            bones[j]:getX(), bones[j]:getY(), size, true))
-end
-
-local function distanceJointBone(muscles, bones, bone, j)
-    table.insert(muscles,
-        globals.world:addJoint('DistanceJoint', bone, bones[j],
-            bone:getX(), bone:getY(),
-            bones[j]:getX(), bones[j]:getY(), true))
-end
-
 local Slime = Class{
-    init = function(self, pos, size, num_vertices, hp)
+    init = function(self, pos, size, num_vertices)
         self.lookDir = 0
-        self.hp = hp or CONFIG.INITIAL_SLIME_HP
-        self.center = globals.world:newCircleCollider(pos.x, pos.y, 10)
+        self.hp = 0 -- 0 is bad, > 50 is good
 
-        self.bones = {}
+        self.sides = {
+            globals.world:newRectangleCollider(pos.x - size, pos.y - size, 1, size),
+            globals.world:newRectangleCollider(pos.x - size, pos.y - size, size, 1),
+            globals.world:newRectangleCollider(pos.x - size, pos.y + size, size, 1),
+            globals.world:newRectangleCollider(pos.x + size, pos.y - size, 1, size)
+        }
 
-        for i = 1, num_vertices do
-            table.insert(self.bones,globals.world:newCircleCollider(
-                pos.x + size * math.cos(2 * math.pi * i / num_vertices),
-                pos.y + size * math.sin(2 * math.pi * i / num_vertices), 1))
+        for _, side in ipairs(self.sides) do
+            side:setRestitution(0.8)
+            side:setCollisionClass('Slime')
         end
 
-        --self.center = self.bones[1]
+        self.center = self.sides[1]
 
-        self.muscles = {}
+        self.joints = {
+            globals.world:addJoint('RevoluteJoint', self.sides[1], self.sides[2],
+                pos.x - size, pos.y - size, false),
+            globals.world:addJoint('RevoluteJoint', self.sides[2], self.sides[4],
+                pos.x + size, pos.y - size, false),
+            globals.world:addJoint('RevoluteJoint', self.sides[3], self.sides[1],
+                pos.x - size, pos.y + size, false),
+            globals.world:addJoint('RevoluteJoint', self.sides[4], self.sides[3],
+                pos.x + size, pos.y + size, false)
+        }
 
-        for i = 1, #self.bones - 1 do
-            distanceJoint(self.muscles, self.bones, i, i + 1)
-        end
-        distanceJoint(self.muscles, self.bones, 1, #self.bones)
-
-        for i = 1, #self.bones - 2 do
-            distanceJoint(self.muscles, self.bones, i, i + 2)
-        end
-        distanceJoint(self.muscles, self.bones, 1, #self.bones - 1)
-        distanceJoint(self.muscles, self.bones, 2, #self.bones)
-
-        for i = 1, #self.bones - 3 do
-            distanceJoint(self.muscles, self.bones, i, i + 3)
-        end
-        distanceJoint(self.muscles, self.bones, 1, #self.bones - 2)
-        distanceJoint(self.muscles, self.bones, 2, #self.bones - 1)
-        distanceJoint(self.muscles, self.bones, 3, #self.bones)
-
-        for i = 1, #self.muscles do
-            self.muscles[i]:setDampingRatio(100)
-        end
-
-        for i = 1, #self.bones do
-            if (math.random() > 0.9) then
-                ropeJointBone(self.muscles, self.bones, size, self.center, i)
-            else
-                distanceJointBone(self.muscles, self.bones, self.center, 1)
-            end
+        for _,joint in ipairs(self.joints) do
+            joint:setLimits(-math.pi*0.2, math.pi*0.2)
+            joint:setLimitsEnabled(true)
         end
     end
 }
 
 function Slime:canMove()
-    return math.abs(globals.surface:getY(self.center:getX()) - self.center:getY()) < 20
+    return math.abs(globals.surface:getY(self.center:getX()) - self.center:getY()) < 40
 end
 
 function Slime:update(dt)
@@ -93,10 +58,17 @@ function Slime:update(dt)
     globals.music.badSlimeSound:play()
 
     -- keep it above the surface
-    for i = 1, #self.bones do
-        local y = globals.surface:getY(self.bones[i]:getX())
-        if self.bones[i]:getY() > y then
-            self.bones[i]:setY(y - 3)
+    for i = 1, #self.sides do
+        local y = globals.surface:getY(self.sides[i]:getX())
+        if self.sides[i]:getY() > y then
+            self.sides[i]:setY(y - 3)
+        end
+    end
+
+    -- handle damage
+    for _, side in ipairs(self.sides) do
+        if side:enter('Bullet') then
+            self.hp = (self.hp + 1) % 100
         end
     end
 end
@@ -132,20 +104,59 @@ end
 function Slime:draw()
 
     -- draw body
-    local vertices = {}
-    for i = 1, #self.bones do
-        table.insert(vertices, self.bones[i]:getX())
-        table.insert(vertices, self.bones[i]:getY())
-    end
-    table.insert(vertices, self.bones[1]:getX())
-    table.insert(vertices, self.bones[1]:getY())
-    love.graphics.setColor(61, 71, 33)
+    local center = vector(
+        (self.sides[1]:getX() + self.sides[2]:getX() + self.sides[3]:getX() + self.sides[4]:getX())/4,
+        (self.sides[1]:getY() + self.sides[2]:getY() + self.sides[3]:getY() + self.sides[4]:getY())/4)
+
+    local centers2 = {
+        vector(
+            (self.sides[1]:getX() + self.sides[2]:getX())/2,
+            (self.sides[1]:getY() + self.sides[2]:getY())/2
+        ),
+        vector(
+            (self.sides[2]:getX() + self.sides[4]:getX())/2,
+            (self.sides[2]:getY() + self.sides[4]:getY())/2
+        ),
+        vector(
+            (self.sides[3]:getX() + self.sides[4]:getX())/2,
+            (self.sides[3]:getY() + self.sides[4]:getY())/2
+        ),
+        vector(
+            (self.sides[3]:getX() + self.sides[1]:getX())/2,
+            (self.sides[3]:getY() + self.sides[1]:getY())/2
+        )
+    }
+
+    local new_points = {
+        (centers2[1] - center) * 1.4 + center,
+        (centers2[2] - center) * 1.4 + center,
+        (centers2[3] - center) * 1.4 + center,
+        (centers2[4] - center) * 1.4 + center
+    }
+
+    local vertices = {
+        self.sides[1]:getX(), self.sides[1]:getY(),
+        new_points[1].x, new_points[1].y,
+        self.sides[2]:getX(), self.sides[2]:getY(),
+        new_points[2].x, new_points[2].y,
+        self.sides[4]:getX(), self.sides[4]:getY(),
+        new_points[3].x, new_points[3].y,
+        self.sides[3]:getX(), self.sides[3]:getY(),
+        new_points[4].x, new_points[4].y
+    }
+
+    local color = (CONFIG.SLIME_GOOD_COLOR - CONFIG.SLIME_BAD_COLOR) * self.hp/100 + CONFIG.SLIME_BAD_COLOR
+
+    love.graphics.setColor(color.x, color.y, 33)
     love.graphics.polygon('fill', vertices)
 
     -- draw eyes
     love.graphics.setColor(255,255,255)
-    love.graphics.circle("fill", vertices[1], vertices[2], 5)
-    love.graphics.circle("fill", vertices[5], vertices[6], 5)
+    love.graphics.circle("fill", center.x + 10, center.y - 10, 5)
+    love.graphics.circle("fill", center.x - 10, center.y - 10, 5)
+    love.graphics.setColor(0,0,255)
+    love.graphics.circle("fill", center.x + 10, center.y - 8, 2)
+    love.graphics.circle("fill", center.x - 10, center.y - 8, 2)
 
     love.graphics.setColor(255, 255, 255)
 end

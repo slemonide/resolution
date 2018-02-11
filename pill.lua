@@ -8,6 +8,7 @@ local Pill = Class{
         self.bone = globals.world:newCircleCollider(pos.x, pos.y, 10)
         self.bone:setMass(2)
         self.img = love.graphics.newImage("assets/Pill-soldier-small.png")
+        self.movingLeft = true
     end
 }
 
@@ -59,16 +60,16 @@ function Pill:fire()
 end
 
 function Pill:update(dt)
-    if love.keyboard.isDown("g") then
+    if love.keyboard.isDown("g") or love.mouse.isDown(3) and self.movingLeft then
         self:moveLeft()
     end
-    if love.keyboard.isDown("h") then
+    if love.keyboard.isDown("h") or love.mouse.isDown(3) and not self.movingLeft then
         self:moveRight()
     end
     if love.mouse.isDown(1) then
         self:fire()
     end
-    if love.keyboard.isDown("space") then
+    if love.keyboard.isDown("space") or love.mouse.isDown(2) then
         self:jump()
     end
 
