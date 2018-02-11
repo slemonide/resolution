@@ -10,6 +10,8 @@ local Pill = Class{
         self.bone:setCollisionClass('Player')
         self.img = love.graphics.newImage("assets/Pill-soldier-small.png")
         self.movingLeft = true
+        self.hp = 100
+        self.delay = 0
     end
 }
 
@@ -67,6 +69,8 @@ function Pill:fire()
 end
 
 function Pill:update(dt)
+    self.delay = self.delay + dt
+
     if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
         self:moveLeft()
     end
@@ -75,7 +79,12 @@ function Pill:update(dt)
     end
     if love.mouse.isDown(1) then
 
-        self:fire()
+       -- globals.music:gun()
+        if self.delay > CONFIG.MACHINEGUN_DELAY then
+            self.delay = 0
+            self:fire()
+        end
+
     end
     if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
         self:jump()
