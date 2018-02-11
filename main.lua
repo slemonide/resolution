@@ -32,6 +32,7 @@ function love.draw()
     love.graphics.draw(background, 0 , 0)
     globals.world:draw()
     globals.surface:draw()
+    globals.pill:draw()
 end
 
 ------------------------

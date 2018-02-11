@@ -14,12 +14,9 @@
 local Pill = Class{
     init = function(self, pos)
         self.pos = pos
-        self.bone = globals.world:newCircleCollider(
-                    pos.x + l * math.cos(2*math.pi/8*i),
-                    pos.y + l * math.sin(2*math.pi/8*i), r)
-        end
-
-
+        self.bone = globals.world:newCircleCollider(pos.x, pos.y, 10)
+        self.img = love.graphics.newImage("assets/Pill-soldier-small.png")
+    end
 }
 
 function Pill:moveLeft()
@@ -27,13 +24,16 @@ function Pill:moveLeft()
 end
 
 function Pill:moveRight()
-
         self.bone:applyLinearImpulse(CONFIG.PILL_IMPULSE, 0)
 end
+
+
+
+
 function Pill:update(dt)
-    if love.keyboard.isDown("a") then
+    if love.keyboard.isDown("g") then
         self:moveLeft()
-    elseif love.keyboard.isDown("d") then
+    elseif love.keyboard.isDown("h") then
         self:moveRight()
     end
 
@@ -41,7 +41,7 @@ function Pill:update(dt)
 
         local y = globals.surface:getY(self.bone:getX())
         if self.bone:getY() > y then
-            self.bone:setY(y - 3)
+            self.bone:setY(y - 5)
         end
 
 end
@@ -49,11 +49,13 @@ end
 
 
 function Pill:draw()
-    love.graphics.draw(self.img, self.pos.x, self.pos.y)
+    love.graphics.push()
+    love.graphics.scale(.5,.5)
+    love.graphics.draw(self.img, self.bone:getX(), self.bone:getY())
+    love.graphics.pop()
+
 end
 
-function Pill:load()
-    self.img = love.graphics.newImage("assets/Pill-soldier-small.png")
-end
+
 
 return Pill
