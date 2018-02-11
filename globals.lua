@@ -39,7 +39,7 @@ local Music = require("music")
 local Hud = require("hud")
 local Camera = require("lib.hump.camera")
 local EightBit = require("eightBit")
-Moan = require('lib.Moan')
+--Moan = require('lib.Moan')
 
 
 function globals:load()
@@ -69,6 +69,7 @@ function globals:load()
     globals.camera = Camera()
     globals.update_delay = 0
 
+    globals.play = true
 
     globals.hud = Hud()
 end

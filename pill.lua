@@ -71,23 +71,25 @@ end
 function Pill:update(dt)
     self.delay = self.delay + dt
 
-    if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
-        self:moveLeft()
-    end
-    if love.keyboard.isDown("h", "d") or love.mouse.isDown(3) and not self.movingLeft then
-        self:moveRight()
-    end
-    if love.mouse.isDown(1) then
-
-       -- globals.music:gun()
-        if self.delay > CONFIG.MACHINEGUN_DELAY then
-            self.delay = 0
-            self:fire()
+    if globals.play then
+        if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
+            self:moveLeft()
         end
+        if love.keyboard.isDown("h", "d") or love.mouse.isDown(3) and not self.movingLeft then
+            self:moveRight()
+        end
+        if love.mouse.isDown(1) then
 
-    end
-    if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
-        self:jump()
+           -- globals.music:gun()
+            if self.delay > CONFIG.MACHINEGUN_DELAY then
+                self.delay = 0
+                self:fire()
+            end
+
+        end
+        if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
+            self:jump()
+        end
     end
 
     -- keep it above the surface
