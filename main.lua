@@ -57,6 +57,8 @@ function love.draw()
     end
 
     globals.camera:detach()
+
+    globals.hud:draw()
 end
 
 ------------------------
