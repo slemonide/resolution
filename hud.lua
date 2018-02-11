@@ -22,6 +22,8 @@ function Hud:draw()
 
     love.graphics.print("Good slimes: " .. good_slimes, 10, 10, 0, 2, 2)
     love.graphics.print("Bad slimes: " .. bad_slimes, 10, 40, 0, 2, 2)
+
+    love.graphics.print("Health: " .. globals.pill.hp, love.graphics.getWidth() - 160, 10, 0, 2, 2)
     love.graphics.setColor(255,255,255)
 end
 
