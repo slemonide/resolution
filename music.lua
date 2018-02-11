@@ -19,7 +19,8 @@ local Music = Class{
         self.machineGun = ripple.newSound("assets/Gun_Loop.wav")
         self.badSlimeSound = ripple.newSound("assets/Bad_Slime_Hurt_Vocalization_3.wav")
         self.slimeHitSound = ripple.newSound("assets/Bullet_Hit_Bad_Slime_3.wav")
-        self.eightBit = ripple.newSound("assets/MUSIC bacteria battle 8bit loop ScottV1.wav")
+
+        self.eightBitSound = ripple.newSound("assets/MUSIC bacteria battle 8bit loop ScottV1.wav")
         self.swallow = ripple.newSound("assets/Game_Start_Swallow.wav")
         self.jumpSound = ripple.newSound("assets/Player_Jump.wav")
         self.goodSlimeSound = ripple.newSound("assets/Good_Slime_Vocalization_2.wav")
@@ -32,7 +33,8 @@ local Music = Class{
 }
 
 function Music:eightBitGame()
-    self.eightBit:play()
+
+    self.eightBitSound:play()
 end
 
 function Music:mainGame()
@@ -59,10 +61,6 @@ end
 
 function Music:goodSlime()
     self.goodSlimeSound:play()
-end
-
-function Music:update(dt)
-
 end
 
 
