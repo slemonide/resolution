@@ -68,12 +68,20 @@ local Slime = Class{
     end
 }
 
+function Slime:canMove()
+    return math.abs(globals.surface:getY(self.center:getX()) - self.center:getY()) < 20
+end
+
 function Slime:moveLeft()
-    self.center:applyLinearImpulse(-CONFIG.SLIME_IMPULSE, 0)
+    if self:canMove() then
+        self.center:applyLinearImpulse(-CONFIG.SLIME_IMPULSE, 0)
+    end
 end
 
 function Slime:moveRight()
-    self.center:applyLinearImpulse(CONFIG.SLIME_IMPULSE, 0)
+    if self:canMove() then
+        self.center:applyLinearImpulse(CONFIG.SLIME_IMPULSE, 0)
+    end
 end
 function Slime:update(dt)
     if love.keyboard.isDown("a") then
