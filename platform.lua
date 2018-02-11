@@ -17,11 +17,21 @@ local platform = Class{
     init = function(self, x ,y)
         self.x = x
         self.y = y
-        self.img = love.graphics.newImage("assets/8-bit-rectangle-tile.png")
+        self.img = love.graphics.newImage("assets/8bit-tile-final.png")
 
-        self.platform = globals.world:newRectangleCollider(x, y, self.img:getHeight(),self.img:getWidth())
+        self.platform = globals.world:newRectangleCollider(x, y, 2*self.img:getWidth(),self.img:getHeight())
         self.platform:setType('static')
         self.platform:setCollisionClass('Platform')
+
+        self.borders = {
+            globals.world:newLineCollider(1000, -2000, 1000, 0),
+            globals.world:newLineCollider(1600, -2000, 1600, 0),
+            globals.world:newLineCollider(1000, -2000, 1600, -2000),
+
+        }
+        self.borders[1]:setType('static')
+        self.borders[2]:setType('static')
+        self.borders[3]:setType('static')
 
     end
 

@@ -12,8 +12,20 @@ local Pill = Class{
         self.movingLeft = true
         self.hp = 100
         self.delay = 0
+        self:whichSong()
     end
 }
+
+function Pill:whichSong()
+
+    if (self.bone:getY() < 0 )then
+     globals.music.eightBitSound:play()
+    elseif (self.bone:getY() > 0 )then
+        globals.music.eightBitSound:stop()
+        globals.music.mainSound:play()
+    end
+
+end
 
 function Pill:canMove()
     return (self.bone:getY() < 0) or (math.abs(globals.surface:getY(self.bone:getX()) - self.bone:getY()) < 40)
@@ -33,7 +45,7 @@ end
 
 function Pill:jump()
     if self:canMove() then
-  --      globals.music:jump()
+        globals.music:jump()
         local tangent = globals.surface:getDerivativeAt(self.bone:getX())
 
         local v = vector.fromPolar(math.atan(tangent) - math.pi/2, CONFIG.PILL_JUMP_STRENGTH)
@@ -46,7 +58,7 @@ function Pill:pos()
 end
 
 function Pill:fire()
-   -- globals.music:gun()
+    globals.music:gun()
     local v_dir = vector(
         love.mouse.getX() - love.graphics.getWidth()/2,
         love.mouse.getY() - love.graphics.getHeight()/2 - 50):normalized()
@@ -71,25 +83,25 @@ end
 function Pill:update(dt)
     self.delay = self.delay + dt
 
-    if globals.play then
-        if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
-            self:moveLeft()
-        end
-        if love.keyboard.isDown("h", "d") or love.mouse.isDown(3) and not self.movingLeft then
-            self:moveRight()
-        end
-        if love.mouse.isDown(1) then
+    if self.bone:getY() > 0 then
+        self:whichSong()
+    end
 
-           -- globals.music:gun()
-            if self.delay > CONFIG.MACHINEGUN_DELAY then
-                self.delay = 0
-                self:fire()
-            end
+    if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
+        self:moveLeft()
+    end
+    if love.keyboard.isDown("h", "d") or love.mouse.isDown(3) and not self.movingLeft then
+        self:moveRight()
+    end
+    if love.mouse.isDown(1) then
+        if self.delay > CONFIG.MACHINEGUN_DELAY then
+            self.delay = 0
+            self:fire()
+        end
+    end
 
-        end
-        if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
-            self:jump()
-        end
+    if love.keyboard.isDown("space", "w") or love.mouse.isDown(2) then
+        self:jump()
     end
 
     -- keep it above the surface

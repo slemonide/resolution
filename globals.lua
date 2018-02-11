@@ -32,10 +32,11 @@ CONFIG = {
 
 
 globals = {}
+
+local Music = require("music")
 local Surface = require("surface")
 local Slime = require("slime")
 local Pill = require("pill")
-local Music = require("music")
 local Hud = require("hud")
 local Camera = require("lib.hump.camera")
 local EightBit = require("eightBit")
@@ -46,6 +47,7 @@ function globals:load()
     globals.world = wf.newWorld(0, 0, false)
     globals.world:setGravity(0, 512)
     globals.world:setQueryDebugDrawing(true)
+    globals.music = Music()
 
     globals.world:addCollisionClass('Player')
     globals.world:addCollisionClass('Good Slime')
@@ -53,7 +55,7 @@ function globals:load()
     globals.world:addCollisionClass('Good Bullet')
     globals.world:addCollisionClass('Bad Bullet')
 
-    globals.music = Music()
+
     globals.eightBit = EightBit()
     globals.surface = Surface()
     globals.slimes = {}
