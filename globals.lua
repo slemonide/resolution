@@ -40,8 +40,6 @@ local Pill = require("pill")
 local Hud = require("hud")
 local Camera = require("lib.hump.camera")
 local EightBit = require("eightBit")
---Moan = require('lib.Moan')
-
 
 function globals:load()
     globals.world = wf.newWorld(0, 0, false)

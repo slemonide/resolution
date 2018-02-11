@@ -113,6 +113,16 @@ function Pill:update(dt)
     if self.bone:getY() > y then
         self.bone:setY(y - 3)
     end
+
+    -- damage
+    if self.bone:enter('Good Bullet') or self.bone:enter('Good Slime') then
+        self.hp = math.min(self.hp + 1, 100)
+        globals.music:slimeIsShot()
+    end
+
+    if self.bone:enter('Bad Bullet') or self.bone:enter('Bad Slime') then
+        self.hp = math.max(self.hp - math.random(10), 0)
+    end
 end
 
 function Pill:draw()
