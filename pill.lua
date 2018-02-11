@@ -41,7 +41,7 @@ function Pill:update(dt)
 
         local y = globals.surface:getY(self.bone:getX())
         if self.bone:getY() > y then
-            self.bone:setY(y - 5)
+            self.bone:setY(y - 3)
         end
 
 end
@@ -49,10 +49,10 @@ end
 
 
 function Pill:draw()
-    love.graphics.push()
-    love.graphics.scale(.5,.5)
-    love.graphics.draw(self.img, self.bone:getX(), self.bone:getY())
-    love.graphics.pop()
+    --love.graphics.push()
+    --love.graphics.scale(.4,.4)
+    love.graphics.draw(self.img, self.bone:getX() - 20 , self.bone:getY() - (self.img:getHeight()*.4), 0, 0.5, 0.5)
+    --love.graphics.pop()
 
 end
 
