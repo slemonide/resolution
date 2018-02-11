@@ -7,7 +7,7 @@ local coefficients2 = {}
 local coefficients3 = {}
 
 local function surface(i)
-    local out = 85
+    local out = 220
 
     for j = 1, CONFIG.SURFACE_COMPLEXITY do
         out = out + math.sin(math.pi*j^coefficients3[j]/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
