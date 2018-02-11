@@ -13,9 +13,13 @@
 
 
 local Music = Class{
-    init = function()
-        sound = ripple.newSound("assets/Stomach_Ambiance.wav")
-        sound:play()
+    init = function(self)
+        self.mainSound = ripple.newSound("assets/Stomach_Ambiance.wav")
+        self.bulletSound = ripple.newSound("assets/Gun_Loop.wav")
+        self.badSlimeSound = ripple.newSound("assets/Bad_Slime_Hurt_Vocalization_3.wav")
+        self.slimeHitSound = ripple.newSound("assets/Bullet_Hit_Bad_Slime_3.wav")
+        self.mainSound:play()
+
     end
 
 }

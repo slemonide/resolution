@@ -22,13 +22,6 @@ local Bullet = Class{
 
 
 
-
-function Bullet:update(dt)
-
-end
-
-
-
 function Bullet:draw()
     love.graphics.setColor(128, 128, 128)
     love.graphics.circle("fill", self.bone:getX(), self.bone:getY(), 3)

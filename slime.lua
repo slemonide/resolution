@@ -25,9 +25,9 @@ local function distanceJointBone(muscles, bones, bone, j)
 end
 
 local Slime = Class{
-    init = function(self, pos, size, num_vertices)
+    init = function(self, pos, size, num_vertices, hp)
         self.pos = pos
-
+        self.hp = hp or CONFIG.INITIAL_SLIME_HP
         self.center = globals.world:newCircleCollider(pos.x, pos.y, 10)
 
         self.bones = {}
@@ -84,6 +84,9 @@ function Slime:moveRight()
     end
 end
 function Slime:update(dt)
+    --globals.music.badSlimeSound.every['1s'] = function() globals.music.badSlimeSound:play() end --periodically make some bad slime sounds
+    globals.music.badSlimeSound:play()
+
     if love.keyboard.isDown("a") then
         self:moveLeft()
     elseif love.keyboard.isDown("d") then
@@ -107,7 +110,7 @@ function Slime:draw()
     end
     table.insert(vertices, self.bones[1]:getX())
     table.insert(vertices, self.bones[1]:getY())
-    love.graphics.setColor(0, 255, 0)
+    love.graphics.setColor(61, 71, 33)
     love.graphics.polygon('fill', vertices)
     love.graphics.setColor(255, 255, 255)
 end

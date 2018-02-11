@@ -30,6 +30,7 @@ end
 
 function Pill:mousepressed(x, y, button)
     if button == 1 then
+        globals.music.bulletSound:play()
         local startX = self.bone:getX()
         local startY = self.bone:getY()
         local mouseX = x
