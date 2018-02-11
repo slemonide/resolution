@@ -55,7 +55,6 @@ function Slime:update(dt)
         self:shoot()
     end
 
-    globals.music.badSlimeSound:play()
 
     -- keep it above the surface
     for i = 1, #self.sides do
@@ -67,11 +66,17 @@ function Slime:update(dt)
 
     -- handle damage
     for _, side in ipairs(self.sides) do
-        if side:enter('Good Bullet') then
+        if side:enter('Good Bullet') then -- comes from goodSlime or player(pill)
+            local initialState = self:isBad()
             self.hp = math.min(self.hp + 5, 100)
+            if initialState ~= self:isBad() then
+                globals.music:goodSlime()
+            end
+            globals.music:slimeIsShot()
+
         end
 
-        if side:enter('Bad Bullet') then
+        if side:enter('Bad Bullet') then --badBullet comes from badSlime
             self.hp = math.max(self.hp - 1, 0)
         end
     end

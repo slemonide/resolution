@@ -15,16 +15,44 @@
 local Music = Class{
     init = function(self)
         self.mainSound = ripple.newSound("assets/Stomach_Ambiance.wav")
-        self.bulletSound = ripple.newSound("assets/Gun_Loop.wav")
+        self.bulletSound = ripple.newSound("assets/Single_Gun_Shot.wav")
+        self.machineGun = ripple.newSound("assets/Gun_Loop.wav")
         self.badSlimeSound = ripple.newSound("assets/Bad_Slime_Hurt_Vocalization_3.wav")
         self.slimeHitSound = ripple.newSound("assets/Bullet_Hit_Bad_Slime_3.wav")
+        self.eightBit = ripple.newSound("assets/MUSIC bacteria battle 8bit loop ScottV1.wav")
+        self.swallow = ripple.newSound("assets/Game_Start_Swallow.wav")
+        self.jumpSound = ripple.newSound("assets/Player_Jump.wav")
+        self.goodSlimeSound = ripple.newSound("assets/Good_Slime_Vocalization_2.wav")
+
+
         self.mainSound:play()
 
     end
 
 }
 
+function Music:jump()
+    self.jumpSound:play()
+end
 
+function Music:gun()
+
+    self.bulletSound:play()
+
+end
+
+function Music:slimeSound()
+    self.badSlimeSound:play()
+end
+
+
+function Music:slimeIsShot()
+    self.slimeHitSound:play()
+end
+
+function Music:goodSlime()
+    self.goodSlimeSound:play()
+end
 
 function Music:update(dt)
 
