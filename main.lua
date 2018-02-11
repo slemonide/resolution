@@ -3,6 +3,8 @@ require("globals")
 require("lib.console.console")
 
 
+
+
 ------------------------
 -- Load love
 ------------------------
@@ -12,6 +14,8 @@ function love.load()
 
     background = love.graphics.newImage("assets/Background.jpg")
     globals:load()
+
+
 end
 
 ------------------------
@@ -22,6 +26,7 @@ function love.update(dt)
     globals.world:update(dt)
     globals.slime:update(dt)
     globals.pill:update(dt)
+    globals.music:update(dt)
 
 
 end

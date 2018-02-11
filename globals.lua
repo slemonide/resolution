@@ -12,6 +12,7 @@ local Surface = require("surface")
 local Slime = require("slime")
 local Pill = require("pill")
 local Bullet = require("bullet")
+local Music = require("music")
 
 function globals:load()
     globals.world = wf.newWorld(0, 0, true)
@@ -21,6 +22,7 @@ function globals:load()
     globals.slime = Slime(vector(200,400))
     globals.pill = Pill(vector(250,400))
     globals.bullets = {}
+    globals.music = Music()
 end
 
 CONFIG = {
