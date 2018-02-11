@@ -12,7 +12,7 @@ require("lib.console.console")
 function love.load()
     math.randomseed(os.time())
 
-    background = love.graphics.newImage("assets/Background.jpg")
+    background = love.graphics.newImage("assets/background-big.png")
     globals:load()
 
 
@@ -64,8 +64,4 @@ function love.keypressed(key)
     end
 
     if (key == "`") then console.Show() end
-end
-
-function love.mousepressed(x,y, button)
-    globals.pill:mousepressed(x,y,button)
 end

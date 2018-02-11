@@ -13,10 +13,9 @@
 
 local Bullet = Class{
     init = function(self, pos, v)
-        self.pos = pos
         self.bone = globals.world:newCircleCollider(pos.x, pos.y, 3)
-        self.bone:setLinearVelocity( v.x , v.y)
-        self.bone:setMass(100)
+        self.bone:setLinearVelocity(v.x , v.y)
+        self.bone:setMass(1)
     end
 }
 

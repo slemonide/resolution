@@ -7,7 +7,7 @@ local coefficients2 = {}
 local coefficients3 = {}
 
 local function surface(i)
-    local out = 80
+    local out = 85
 
     for j = 1, CONFIG.SURFACE_COMPLEXITY do
         out = out + math.sin(math.pi*j^coefficients3[j]/2*i/CONFIG.XSIZE + 2 * math.pi * coefficients2[j]) * coefficients[j]
@@ -40,6 +40,12 @@ local Surface = Class{
         init_vertices(self.vertices)
 
         self.collision_map = globals.world:newChainCollider(false, self.vertices)
+        self.borders = {
+            globals.world:newLineCollider(0, 0, 0, 10000),
+            globals.world:newLineCollider(CONFIG.XSIZE, 0, CONFIG.XSIZE, 10000)
+        }
+        self.borders[1]:setType('static')
+        self.borders[2]:setType('static')
         self.collision_map:setType('static')
         self.collision_map:setRestitution(CONFIG.SURFACE_RESTITUTION)
     end
