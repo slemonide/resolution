@@ -73,8 +73,12 @@ function Slime:update(dt)
     end
 
     -- keep it above the surface
-    --for i = 1, #self.bones do
-        --if self.bones[i]:get
+    for i = 1, #self.bones do
+        local y = globals.surface:getY(self.bones[i]:getX())
+        if self.bones[i]:getY() > y then
+            self.bones[i]:setY(y - 3)
+        end
+    end
 end
 
 function Slime:draw()
