@@ -11,10 +11,6 @@ function love.load()
     math.randomseed(os.time())
 
     background = love.graphics.newImage("assets/Background.jpg")
-
-
-
-
     globals:load()
 end
 
@@ -26,8 +22,6 @@ function love.update(dt)
     globals.world:update(dt)
     globals.slime:update(dt)
     globals.pill:update(dt)
-
-    --globals.bullet:update(dt)
 
 
 end

@@ -5,6 +5,9 @@
 -- Time: 6:44 PM
 -- To change this template use File | Settings | File Templates.
 --
+------------------------------------------------------------------------
+-- Bullets that are shot by the soldier pill using mouse
+------------------------------------------------------------------------
 
 
 
@@ -21,10 +24,6 @@ local Bullet = Class{
 
 
 function Bullet:update(dt)
-  --  for i,v in ipairs(bullets) do
-    -- --     v.x = v.x + (v.dx * dt)
-  --      v.y = v.y + (v.dy * dt)
-  --  end
 
 end
 
