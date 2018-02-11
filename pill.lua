@@ -12,7 +12,7 @@ local Pill = Class{
 }
 
 function Pill:canMove()
-    return math.abs(globals.surface:getY(self.bone:getX()) - self.bone:getY()) < 20
+    return math.abs(globals.surface:getY(self.bone:getX()) - self.bone:getY()) < 40
 end
 
 function Pill:moveLeft()
@@ -27,8 +27,16 @@ function Pill:moveRight()
     end
 end
 
+function Pill:jump()
+    if self:canMove() then
+        local tangent = globals.surface:getDerivativeAt(self.bone:getX())
 
-function Pill:mousepressed()
+        local v = vector.fromPolar(math.atan(tangent) - math.pi/2, CONFIG.PILL_JUMP_STRENGTH)
+        self.bone:applyLinearImpulse(v.x, v.y)
+    end
+end
+
+function Pill:fire()
     local v_dir = vector(
         love.mouse.getX() - love.graphics.getWidth()/2,
         love.mouse.getY() - love.graphics.getHeight()/2 - 50):normalized()
@@ -47,17 +55,21 @@ function Pill:mousepressed()
         if (globals.bullets.pos > #globals.bullets) then
             globals.bullets.pos = 1
         end
-
     end
 end
 
 function Pill:update(dt)
     if love.keyboard.isDown("g") then
         self:moveLeft()
-    elseif love.keyboard.isDown("h") then
+    end
+    if love.keyboard.isDown("h") then
         self:moveRight()
-    elseif love.mouse.isDown(1) then
-        self:mousepressed()
+    end
+    if love.mouse.isDown(1) then
+        self:fire()
+    end
+    if love.keyboard.isDown("space") then
+        self:jump()
     end
 
     -- keep it above the surface
@@ -69,7 +81,6 @@ end
 
 function Pill:draw()
     love.graphics.draw(self.img, self.bone:getX() - 20 , self.bone:getY() - (self.img:getHeight()*.4), 0, 0.5, 0.5)
-
 end
 
 return Pill

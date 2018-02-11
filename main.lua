@@ -2,9 +2,6 @@ require("globals")
 
 require("lib.console.console")
 
-
-
-
 ------------------------
 -- Load love
 ------------------------
@@ -23,11 +20,19 @@ end
 ------------------------
 
 function love.update(dt)
-    globals.world:update(dt)
-    globals.slime:update(dt)
-    globals.pill:update(dt)
+    if globals.update_delay > CONFIG.UPDATE_DELAY then
+        globals.update_delay = 0
+        for i, s in ipairs(globals.slimes) do
+            s:update(dt)
+        end
+        globals.pill:update(dt)
+    else
+        globals.update_delay = globals.update_delay + dt
+    end
 
+    globals.world:update(dt)
     globals.camera:lookAt(globals.pill.bone:getX(), globals.pill.bone:getY() - 50)
+    globals.camera:zoomTo(4/math.log(40 + globals.surface:getY(globals.pill.bone:getX()) - globals.pill.bone:getY()))
 end
 
 ------------------------
@@ -41,7 +46,9 @@ function love.draw()
     --globals.world:draw()
     globals.surface:draw()
     globals.pill:draw()
-    globals.slime:draw()
+    for i, s in ipairs(globals.slimes) do
+        s:draw()
+    end
     for i, b in ipairs(globals.bullets) do
         b:draw()
     end

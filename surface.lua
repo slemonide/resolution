@@ -55,6 +55,10 @@ function Surface:getY(x)
     return surface(x)
 end
 
+function Surface:getDerivativeAt(x)
+    return self:getY(x + 1) - 2 * self:getY(x) + self:getY(x - 1) -- central scheme
+end
+
 function Surface:draw()
     love.graphics.setColor(216, 76, 11)
     love.graphics.polygon('fill', self.vertices)
