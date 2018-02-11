@@ -12,6 +12,7 @@ local Pill = Class{
         self.movingLeft = true
         self.hp = 100
         self.delay = 0
+        self.switchBoundary = false
         self:whichSong()
     end
 }
@@ -58,7 +59,9 @@ function Pill:pos()
 end
 
 function Pill:fire()
-    globals.music:gun()
+    globals.music.mainSound:stop()
+    globals.music.machineGun:play()
+    globals.music.mainSound:play()
     local v_dir = vector(
         love.mouse.getX() - love.graphics.getWidth()/2,
         love.mouse.getY() - love.graphics.getHeight()/2 - 50):normalized()
@@ -83,8 +86,9 @@ end
 function Pill:update(dt)
     self.delay = self.delay + dt
 
-    if self.bone:getY() > 0 then
+    if self.bone:getY() > 0 and not self.switchBoundary then
         self:whichSong()
+        self.switchBoundary = true
     end
 
     if love.keyboard.isDown("g", "a") or love.mouse.isDown(3) and self.movingLeft then
