@@ -9,7 +9,7 @@ require("lib.console.console")
 function love.load()
     math.randomseed(os.time())
 
-    background = love.graphics.newImage("assets/background-big.png")
+    background = love.graphics.newImage("assets/background-final.png")
     globals:load()
 
 
