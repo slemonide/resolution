@@ -123,6 +123,10 @@ function Pill:update(dt)
     if self.bone:enter('Bad Bullet') or self.bone:enter('Bad Slime') then
         self.hp = math.max(self.hp - math.random(10), 0)
     end
+
+    if (self.hp == 0) then
+        globals.game_over = true
+    end
 end
 
 function Pill:draw()

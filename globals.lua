@@ -69,7 +69,7 @@ function globals:load()
     globals.camera = Camera()
     globals.update_delay = 0
 
-    globals.play = true
+    globals.game_over = false
 
     globals.hud = Hud()
 end

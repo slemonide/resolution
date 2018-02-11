@@ -78,7 +78,7 @@ function Slime:update(dt)
         self:move()
     end
 
-    if (math.random() > 0.9) then
+    if (math.random() > 0.6 and (self:pos() - globals.pill:pos()):len() < 200) then
         self:shoot()
     end
 

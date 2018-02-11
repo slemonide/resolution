@@ -38,25 +38,29 @@ end
 ------------------------
 
 function love.draw()
+    if globals.game_over then
+        love.graphics.setColor(200,123,41)
+        love.graphics.print("GAME OVER", 40, 50, 0, 6, 6)
+    else
+        globals.camera:attach()
 
-    globals.camera:attach()
+        globals.eightBit:draw()
 
-    globals.eightBit:draw()
+        love.graphics.draw(background, 0 , 0)
+        --globals.world:draw()
+        globals.surface:draw()
+        globals.pill:draw()
+        for i, s in ipairs(globals.slimes) do
+            s:draw()
+        end
+        for i, b in ipairs(globals.bullets) do
+            b:draw()
+        end
 
-    love.graphics.draw(background, 0 , 0)
-    --globals.world:draw()
-    globals.surface:draw()
-    globals.pill:draw()
-    for i, s in ipairs(globals.slimes) do
-        s:draw()
+        globals.camera:detach()
+
+        globals.hud:draw()
     end
-    for i, b in ipairs(globals.bullets) do
-        b:draw()
-    end
-
-    globals.camera:detach()
-
-    globals.hud:draw()
 end
 
 ------------------------
