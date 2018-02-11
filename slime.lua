@@ -10,6 +10,13 @@ local function distanceJoint(muscles, bones, i, j)
             bones[j]:getX(), bones[j]:getY(), true))
 end
 
+local function ropeJointBone(muscles, bones, size, bone, j)
+    table.insert(muscles,
+        globals.world:addJoint('RopeJoint', bone, bones[j],
+            bone:getX(), bone:getY(),
+            bones[j]:getX(), bones[j]:getY(), size, true))
+end
+
 local function distanceJointBone(muscles, bones, bone, j)
     table.insert(muscles,
         globals.world:addJoint('DistanceJoint', bone, bones[j],
@@ -18,48 +25,63 @@ local function distanceJointBone(muscles, bones, bone, j)
 end
 
 local Slime = Class{
-    init = function(self, pos)
+    init = function(self, pos, size, num_vertices)
         self.pos = pos
-
-        local l = 20
-        local r = 5
 
         self.center = globals.world:newCircleCollider(pos.x, pos.y, 10)
 
-        self.bones = {
-            globals.world:newCircleCollider(pos.x + l, pos.y + l, 1),
-            globals.world:newCircleCollider(pos.x + l, pos.y - l, 1),
-            globals.world:newCircleCollider(pos.x - l, pos.y - l, 1),
-            globals.world:newCircleCollider(pos.x - l, pos.y + l, 1)
-        }
+        self.bones = {}
+
+        for i = 1, num_vertices do
+            table.insert(self.bones,globals.world:newCircleCollider(
+                pos.x + size * math.cos(2 * math.pi * i / num_vertices),
+                pos.y + size * math.sin(2 * math.pi * i / num_vertices), 1))
+        end
 
         self.muscles = {}
-        distanceJoint(self.muscles, self.bones, 1, 2)
-        distanceJoint(self.muscles, self.bones, 2, 3)
-        distanceJoint(self.muscles, self.bones, 3, 4)
-        distanceJoint(self.muscles, self.bones, 4, 1)
 
-        distanceJoint(self.muscles, self.bones, 1, 3)
-        distanceJoint(self.muscles, self.bones, 4, 2)
+        for i = 1, #self.bones - 1 do
+            distanceJoint(self.muscles, self.bones, i, i + 1)
+        end
+        distanceJoint(self.muscles, self.bones, 1, #self.bones)
 
-        distanceJoint(self.muscles, self.bones, 1, 2)
-        distanceJoint(self.muscles, self.bones, 2, 3)
-        distanceJoint(self.muscles, self.bones, 3, 4)
-        distanceJoint(self.muscles, self.bones, 4, 1)
+        for i = 1, #self.bones - 2 do
+            distanceJoint(self.muscles, self.bones, i, i + 2)
+        end
+        distanceJoint(self.muscles, self.bones, 1, #self.bones - 1)
+        distanceJoint(self.muscles, self.bones, 2, #self.bones)
 
-        distanceJointBone(self.muscles, self.bones, self.center, 1)
-        distanceJointBone(self.muscles, self.bones, self.center, 2)
-        distanceJointBone(self.muscles, self.bones, self.center, 3)
-        distanceJointBone(self.muscles, self.bones, self.center, 4)
+        for i = 1, #self.bones - 3 do
+            distanceJoint(self.muscles, self.bones, i, i + 3)
+        end
+        distanceJoint(self.muscles, self.bones, 1, #self.bones - 2)
+        distanceJoint(self.muscles, self.bones, 2, #self.bones - 1)
+        distanceJoint(self.muscles, self.bones, 3, #self.bones)
+
+        for i = 1, #self.bones do
+            if (math.random() > 0.9) then
+                ropeJointBone(self.muscles, self.bones, size, self.center, i)
+            else
+                distanceJointBone(self.muscles, self.bones, self.center, 1)
+            end
+        end
     end
 }
 
+function Slime:canMove()
+    return math.abs(globals.surface:getY(self.center:getX()) - self.center:getY()) < 20
+end
+
 function Slime:moveLeft()
-    self.center:applyLinearImpulse(-CONFIG.SLIME_IMPULSE, 0)
+    if self:canMove() then
+        self.center:applyLinearImpulse(-CONFIG.SLIME_IMPULSE, 0)
+    end
 end
 
 function Slime:moveRight()
-    self.center:applyLinearImpulse(CONFIG.SLIME_IMPULSE, 0)
+    if self:canMove() then
+        self.center:applyLinearImpulse(CONFIG.SLIME_IMPULSE, 0)
+    end
 end
 function Slime:update(dt)
     if love.keyboard.isDown("a") then
@@ -85,7 +107,6 @@ function Slime:draw()
     end
     table.insert(vertices, self.bones[1]:getX())
     table.insert(vertices, self.bones[1]:getY())
-    local curve = love.math.newBezierCurve(vertices)
     love.graphics.setColor(0, 255, 0)
     love.graphics.polygon('fill', vertices)
     love.graphics.setColor(255, 255, 255)

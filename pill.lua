@@ -1,11 +1,3 @@
---
--- Created by IntelliJ IDEA.
--- User: eylulaygun
--- Date: 2018-02-10
--- Time: 4:24 PM
--- To change this template use File | Settings | File Templates.
---
-
 ------------------------------------------------------------------------
 -- Soldier Pill boi
 ------------------------------------------------------------------------
@@ -13,18 +5,26 @@ local Bullet = require("bullet")
 
 local Pill = Class{
     init = function(self, pos)
-        self.pos = pos
         self.bone = globals.world:newCircleCollider(pos.x, pos.y, 10)
+        self.bone:setMass(2)
         self.img = love.graphics.newImage("assets/Pill-soldier-small.png")
     end
 }
 
+function Pill:canMove()
+    return math.abs(globals.surface:getY(self.bone:getX()) - self.bone:getY()) < 20
+end
+
 function Pill:moveLeft()
+    if self:canMove() then
         self.bone:applyLinearImpulse(-CONFIG.PILL_IMPULSE, 0)
+    end
 end
 
 function Pill:moveRight()
+    if self:canMove() then
         self.bone:applyLinearImpulse(CONFIG.PILL_IMPULSE, 0)
+    end
 end
 
 

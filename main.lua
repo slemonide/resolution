@@ -28,7 +28,7 @@ function love.update(dt)
     globals.pill:update(dt)
     globals.music:update(dt)
 
-
+    globals.camera:lookAt(globals.pill.bone:getX(), globals.pill.bone:getY() - 50)
 end
 
 ------------------------
@@ -36,8 +36,10 @@ end
 ------------------------
 
 function love.draw()
+    globals.camera:attach()
+
     love.graphics.draw(background, 0 , 0)
-    globals.world:draw()
+    --globals.world:draw()
     globals.surface:draw()
     globals.pill:draw()
     globals.slime:draw()
@@ -45,8 +47,7 @@ function love.draw()
         b:draw()
     end
 
-
-
+    globals.camera:detach()
 end
 
 ------------------------
